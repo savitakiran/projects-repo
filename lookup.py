@@ -1,39 +1,33 @@
 #!/usr/bin/env python
-# import json module
 import json
+import argparse
 import sys
+import optparse
 from optparse import OptionParser
 
 # Load the json data
 with open('./data.json') as jsondata:
   countrycodes = json.load(jsondata)
 
-def main():
-  if len(sys.argv) < 2:
-        print("Need country code parameter")
-        print("Usage: ", sys.argv[0], "--countryCode=AU,AL")
-  else:
-        get_country_names()
+def main(args):
+        get_country_names(args)
 
-def get_country_names():
+def get_country_names(args):
 # Get country codes
-  keys = ["--countryCode="]                                                                                                    
-  for i in range(1,len(sys.argv)):                                                                                             
-    for key in keys:
-        if sys.argv[i].find(key) == 0:
-            arg_set = sys.argv[i][len(key):]
-            list1 = arg_set.split(',')
-            break
+  list = args.countryCode.split(',')
 
-    # Output based on country codes
-    for val in list1:
-      print ("Country code: %s" % val)
-      if val in countrycodes:
+  # Output country name based on country codes
+  for val in list:
+      #print ("Country code: %s" % val)
+      if val in countrycodes['data']:
        if 'name' in countrycodes['data'][val]:
-         print(countrycodes['data'][val]['name'])
+         print(val, "is country code for: ", countrycodes['data'][val]['name'])
       else:
          print("Invalid country code")
 
 
 if __name__ == "__main__":
-   main()
+   parser = argparse.ArgumentParser(description='Get country name(s) ')
+   parser.add_argument('--countryCode', required=True, help='Enter comma delimited country code(s)')
+   args = parser.parse_args()
+   main(args)
