@@ -1,0 +1,47 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: craft-demo-service
+spec:
+  selector:
+    app: craft-demo
+  ports:
+  - protocol: "TCP"
+    port: 7001
+    targetPort: 5000
+  type: LoadBalancer
+
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: craft-demo
+  labels:
+     app: craft-demo
+spec:
+  selector:
+     matchLabels:
+       app: craft-demo
+       version: v2
+  replicas: 4
+  template:
+    metadata:
+      labels:
+        app: craft-demo
+        version: v2
+    spec:
+      containers:
+      - name: craft-demo
+        image: savitakiran/craft-demo:v2
+        imagePullPolicy: Always
+        livenessProbe:
+          httpGet:
+           path: /health
+           port: 5000
+          initialDelaySeconds: 5
+          timeoutSeconds: 2
+          periodSeconds: 10
+          failureThreshold: 3
+        ports:
+        - containerPort: 5000
