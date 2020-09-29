@@ -11,7 +11,7 @@ Enter comma delimited country codes
 Example:
   lookup.py --countryCode=AU,AL
   
-# Bonus part
+# Bonus part - deploy the service to local k8 cluster
 Expose craft demo functionality via REST with three routes
 
 1. /diag - returns the status of api https://www.travel-advisory.info/api
@@ -20,7 +20,6 @@ Expose craft demo functionality via REST with three routes
 
 3. /convert - returns country name(s) for a given country code(s)
 
-# Deploy the service to local k8s cluster
 Use the YAML file deploy the service
   kubectl apply -f deployment-craft-demo-v2.yaml
   
